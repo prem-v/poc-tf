@@ -23,12 +23,45 @@ def python_json_file_to_dict(file_path):
         file_object = open(file_path, 'r')
         # Load JSON file data to a python dict object.
         dict_object = json.load(file_object)
+        update_engress(dict_object)
         print(dict_object)
-        dict_object['hello'] = 'world2'
-        print(dict_object)
+        all_values = list(nested_dict_values_iterator(dict_object))
+        print(all_values)
+        # print(dict_object)
         return dict_object
     except FileNotFoundError:
-        print(file_path + " not found. ") 
+        print(file_path + " not found. ")
+
+def update_engress(dict_object):
+  engressValues = dict_object['resource']['aws_security_group_rule'].values()
+  count = 0
+  for v in engressValues:
+    count += 1
+  print(count)
+  engress_str = f'engress{count+1}'
+  print(engress_str)
+  if count>0:
+    new_engress_str = f'engress{count+1}'
+    old_engress_str = f'engress{count}'
+    dict_object['resource']['aws_security_group_rule'][new_engress_str]=dict_object['resource']['aws_security_group_rule'][old_engress_str]
+    dict_object['resource']['aws_security_group_rule'][engress_str]['vpc-id']='xyz' 
+
+def nested_dict_values_iterator(dict_obj):
+    ''' This function accepts a nested dictionary as argument
+        and iterate over all values of nested dictionaries
+    '''
+    # Iterate over all values of given dictionary
+    for value in dict_obj.values():
+        # Check if value is of dict type
+        if isinstance(value, dict):
+            # If value is dict then iterate over all its values
+            for v in  nested_dict_values_iterator(value):
+                yield v
+        else:
+            # If value is not dict type then yield the value
+            yield value
+
+
 def python_dict_to_json_file(file_path, dict_object):
     try:
         # Get a file object with write permission.
