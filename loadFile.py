@@ -25,8 +25,8 @@ def python_json_file_to_dict(file_path):
         dict_object = json.load(file_object)
         update_engress(dict_object)
         print(dict_object)
-        all_values = list(nested_dict_values_iterator(dict_object))
-        print(all_values)
+        # all_values = list(nested_dict_values_iterator(dict_object))
+        # print(all_values)
         # print(dict_object)
         return dict_object
     except FileNotFoundError:
@@ -38,13 +38,11 @@ def update_engress(dict_object):
   for v in engressValues:
     count += 1
   print(count)
-  engress_str = f'engress{count+1}'
-  print(engress_str)
   if count>0:
     new_engress_str = f'engress{count+1}'
     old_engress_str = f'engress{count}'
     dict_object['resource']['aws_security_group_rule'][new_engress_str]=dict_object['resource']['aws_security_group_rule'][old_engress_str]
-    dict_object['resource']['aws_security_group_rule'][engress_str]['vpc-id']='xyz' 
+    dict_object['resource']['aws_security_group_rule'][new_engress_str]['vpc-id']='xyz' 
 
 def nested_dict_values_iterator(dict_obj):
     ''' This function accepts a nested dictionary as argument
